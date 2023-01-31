@@ -1,6 +1,9 @@
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
+  background-color: #F5F8FB;
+  font-family: 'Roboto', sans-serif;
+  color: #262b40;
 }
 
 html {
@@ -29,7 +32,7 @@ main {
 
 .sidebar .username {
   color: #c1242b !important;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .dropdown-toggle { outline: 0; }
@@ -44,4 +47,42 @@ main {
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
   background-color: #c1242b !important;
   color: #fff !important;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 36px;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 36px;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 36px;
+}
+
+.auth-form {
+  border-radius: 5px;
+  margin-top: 5% !important;
+  margin: auto;
+  width: 35%;
+  padding: 20px 40px;
+  -webkit-box-shadow: 10px 10px 51px -15px rgba(185,192,199,1);
+  -moz-box-shadow: 10px 10px 51px -15px rgba(185,192,199,1);
+  box-shadow: 10px 10px 51px -15px rgba(185,192,199,1);
+}
+
+.auth-form .lostpassword {
+  font-size: 14px !important;
+}
+
+.btn-wh {
+  background-color: #c1242b !important;
+  border-color: #c1242b !important;
 }
