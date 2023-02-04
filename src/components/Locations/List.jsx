@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import { FiMapPin, FiMoreVertical, FiPlus } from 'react-icons/fi'
 import swal from 'sweetalert';
@@ -10,13 +10,14 @@ const header = ['Title', 'Address', 'Map', 'Phone', 'Manager'];
 function LocationList() {
     const [data, setData] = useState([]);
     const [title, setTitle] = useState('');
+    const history = useHistory();
 
     const fetchLocations = useCallback(async () => {
         try {
             const { data } = await axios.get(`${locations}?title=${title}`);
             setData(data);
         } catch (error) {
-            swal('Failed', error.response.data.message, 'error');
+            swal('Failed', error.response.data.message, 'error').then(() => history.push('/locations/new'));
         }
     }, [title]);
 
@@ -75,7 +76,7 @@ function LocationList() {
                                                     <li><Link to={'/locations/' + each._id} className="dropdown-item">Manage</Link></li>
                                                     <li><button className="dropdown-item" type="button">Upload Images</button></li>
                                                     <li><button className="dropdown-item" type="button">Upload Videos</button></li>
-                                                    <li><button className="dropdown-item" type="button">Show Bookings</button></li>
+                                                    <li><Link to={'/bookings/location/' + each._id} className="dropdown-item" type="button">Show Bookings</Link></li>
                                                 </ul>
                                             </div></td>
                                     </tr>

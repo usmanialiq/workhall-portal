@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import { FiPlus, FiMoreVertical } from 'react-icons/fi'
 import swal from 'sweetalert';
@@ -14,13 +14,14 @@ function InventoryList() {
     const [category, setCategory] = useState('');
     const [location, setLocation] = useState('');
     const [locationsData, setLocations] = useState([]);
+    const history = useHistory();
 
     const fetchInventory = useCallback(async () => {
         try {
             const { data } = await axios.get(`${inventory}?title=${title}&category=${category}&location=${location}`);
             setData(data.inventory);
         } catch (error) {
-            swal('Failed', error.response.data.message, 'error');
+            swal('Failed', error.response.data.message, 'error').then(() => history.push('/inventory/new'));
         }
     }, [title, category, location]);
 
@@ -29,7 +30,7 @@ function InventoryList() {
             const { data } = await axios.get(`${locations}`);
             setLocations(data);
         } catch (error) {
-            swal('Failed', error.response.data.message, 'error');
+            swal('Failed', error.response.data.message, 'error').then(() => history.push('/locations/new'));
         }
     }, []);
 
@@ -105,7 +106,7 @@ function InventoryList() {
                                                 <ul className="dropdown-menu">
                                                     <li><Link to={'/inventory/' + each._id} className="dropdown-item">Manage</Link></li>
                                                     <li><button className="dropdown-item" type="button">Upload Images</button></li>
-                                                    <li><button className="dropdown-item" type="button">Show Bookings</button></li>
+                                                    <li><Link to={'/bookings/inventory/' + each._id} className="dropdown-item" type="button">Show Bookings</Link></li>
                                                 </ul>
                                             </div></td>
                                     </tr>

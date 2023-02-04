@@ -93,7 +93,7 @@ function UserList() {
                                                 <ul className="dropdown-menu">
                                                     <li><Link to={'/users/' + each._id} className="dropdown-item">Manage</Link></li>
                                                     <li><button className="dropdown-item" type="button">Block Access</button></li>
-                                                    <li><button className="dropdown-item" type="button">Show Bookings</button></li>
+                                                    <li><Link to={'/bookings/user/' + each._id} className="dropdown-item" type="button">Show Bookings</Link></li>
                                                 </ul>
                                             </div></td>
                                     </tr>
