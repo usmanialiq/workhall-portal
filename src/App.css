@@ -78,6 +78,10 @@ h3 {
   box-shadow: 10px 10px 51px -15px rgba(185,192,199,1);
 }
 
+.auth-login {
+  margin-top: 10% !important;
+}
+
 .auth-form .lostpassword {
   font-size: 14px !important;
 }
