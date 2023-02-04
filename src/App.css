@@ -1,3 +1,7 @@
+:root {
+  --primary-color: #c1242b;
+}
+
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
@@ -23,16 +27,18 @@ main {
 .sidebar {
   width: 240px;
   height: 100vh;
-  border-right: 1px solid #c1242b;
+  border-right: 1px solid var(--primary-color);
 }
 
 .sidebar a {
   color: rgb(36, 36, 36) !important;
 }
 
-.sidebar .username {
-  color: #c1242b !important;
+.sidebar .username,
+.sidebar .dropdown-item {
+  color: var(--primary-color) !important;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .dropdown-toggle { outline: 0; }
@@ -45,7 +51,7 @@ main {
 .lh-tight { line-height: 1.25; }
 
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-  background-color: #c1242b !important;
+  background-color: var(--primary-color) !important;
   color: #fff !important;
 }
 
@@ -87,6 +93,27 @@ h3 {
 }
 
 .btn-wh {
-  background-color: #c1242b !important;
-  border-color: #c1242b !important;
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+table {
+  background-color: #fff;
+}
+
+.table-primary-head {
+  background-color: var(--primary-color);
+  color: #fff !important;
+}
+
+.users .dropdown-toggle::after {
+  display: none;
+}
+
+.users .table-responsive {
+  overflow-x: revert !important;
+}
+
+textarea {
+  height: 150px !important;
 }

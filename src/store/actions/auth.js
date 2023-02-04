@@ -49,7 +49,7 @@ export const setCurrentUser = decoded => {
 };
 
 // Log Uer Out
-export const logoutUser = () => dispath => {
+export const logoutUser = (history) => dispath => {
 	// Remove token from local storage
 	localStorage.removeItem('accessToken');
 	localStorage.removeItem('name');
@@ -61,4 +61,5 @@ export const logoutUser = () => dispath => {
 	setAuthToken(false);
 	// set the current user to {} which will also set isAuthenticated: false
 	dispath(setCurrentUser({}));
+	window.location.href = '/';
 };
