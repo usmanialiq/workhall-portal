@@ -5,6 +5,7 @@ import swal from 'sweetalert';
 import moment from 'moment';
 import { FiMoreVertical } from 'react-icons/fi'
 import { bookings } from '../../config/api-routes';
+import { InvoicePdf } from '../Invoice';
 
 const header = ['Customer', 'Start Date', 'End Date', 'Amount', 'Payment Mode', 'Paid'];
 
@@ -118,6 +119,7 @@ function BookingList() {
                                                 <ul className="dropdown-menu">
                                                     <li><Link to={'/bookings/' + each._id} className="dropdown-item">Manage</Link></li>
                                                     <li><button className="dropdown-item" type="button">Mark as paid</button></li>
+                                                    <li><button className="dropdown-item" type="button"><InvoicePdf /></button></li>
                                                 </ul>
                                             </div></td>
                                     </tr>
