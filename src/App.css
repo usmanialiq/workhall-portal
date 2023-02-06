@@ -114,6 +114,6 @@ table {
   overflow-x: revert !important;
 }
 
-textarea {
+.c-textarea {
   height: 150px !important;
 }

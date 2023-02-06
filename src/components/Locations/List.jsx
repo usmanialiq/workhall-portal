@@ -98,7 +98,7 @@ function LocationList() {
                         </ul>
                     </nav>
                 </>
-            ) : <p>No Users found</p>}
+            ) : <p>No Locations found</p>}
         </div>
     );
 }
