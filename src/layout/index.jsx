@@ -9,6 +9,7 @@ const appRoutes = [
     { name: 'Locations', url: '/locations' }, 
     { name: 'Inventory', url: '/inventory' }, 
     { name: 'Users', url: '/users' }, 
+    { name: 'Community', url: '/community' }, 
 ];
 
 function Layout({ children }) {

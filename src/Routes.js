@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PrivateRoute from './utils/PrivateRoute';
 
@@ -6,14 +6,15 @@ import LoginPage from './pages/auth/LogIn';
 import RegisterPage from './pages/auth/Register';
 import DashboardPage from './pages/dashboard';
 import UserList from './components/Users/List';
-import LocationList from "./components/Locations/List";
-import CreateLocation from "./components/Locations/Create";
-import InventoryList from "./components/Inventory/List";
-import CreateInventory from "./components/Inventory/Create";
-import BookingList from "./components/Bookings/List";
-import InventoryBookingList from "./components/Bookings/ByInventory";
-import UserBookingList from "./components/Bookings/ByUser";
-import LocationBookingList from "./components/Bookings/ByLocation";
+import LocationList from './components/Locations/List';
+import CreateLocation from './components/Locations/Create';
+import InventoryList from './components/Inventory/List';
+import CreateInventory from './components/Inventory/Create';
+import BookingList from './components/Bookings/List';
+import InventoryBookingList from './components/Bookings/ByInventory';
+import UserBookingList from './components/Bookings/ByUser';
+import LocationBookingList from './components/Bookings/ByLocation';
+import Community from './pages/community';
 
 export const Routes = () => (
     <Switch>
@@ -31,6 +32,7 @@ export const Routes = () => (
         <PrivateRoute exact component={InventoryBookingList} path='/bookings/inventory/:id' />
         <PrivateRoute exact component={UserBookingList} path='/bookings/user/:id' />
         <PrivateRoute exact component={LocationBookingList} path='/bookings/location/:id' />
+        <PrivateRoute exact component={Community} path='/community' />
         <Route path='*'>
             Not Found
         </Route>

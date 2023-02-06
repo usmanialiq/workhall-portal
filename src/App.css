@@ -117,3 +117,12 @@ table {
 textarea {
   height: 150px !important;
 }
+
+.user-img {
+  border-radius: 50% !important;
+}
+
+.card {
+  border-radius: 17px !important;
+  border-color: #ffffff !important;
+}
