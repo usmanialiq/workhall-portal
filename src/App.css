@@ -126,3 +126,12 @@ textarea {
   border-radius: 17px !important;
   border-color: #ffffff !important;
 }
+
+.revert-form-control {
+  border-color: #fff !important;
+}
+
+.revert-form-control:focus {
+  border-color: #fff !important;
+  box-shadow: none !important;
+}

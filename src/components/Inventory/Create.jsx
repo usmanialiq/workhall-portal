@@ -88,7 +88,7 @@ function CreateInventory() {
                             onChange={e => setData({ ...data, title: e.target.value})}
                             required
                         />
-                        <label htmlFor='title'>Title</label>
+                        <label htmlFor='title'>Title *</label>
                     </div>
                 </div>
                 <div className='col-6'>
@@ -101,7 +101,7 @@ function CreateInventory() {
                             onChange={e => setData({ ...data, category: e.target.value})}
                             required
                         />
-                        <label htmlFor='category'>Category</label>
+                        <label htmlFor='category'>Category *</label>
                     </div>
                 </div>
                 <div className='col-6'>
@@ -109,7 +109,7 @@ function CreateInventory() {
                         <select className='form-select' id='locations' required onChange={e => setData({ ...data, location: e.target.value})}>
                             {locationsData.map((each) => <option key={each._id} value={each._id}>{each.title}</option>)}
                         </select>
-                        <label htmlFor='locations'>Location</label>
+                        <label htmlFor='locations'>Location *</label>
                     </div>
                 </div>
                 <div className='col-6'></div>
@@ -136,7 +136,7 @@ function CreateInventory() {
                             onChange={e => setData({ ...data, pricePerHour: e.target.value})}
                             required
                         />
-                        <label htmlFor='pricePerHour'>Price Per Hour</label>
+                        <label htmlFor='pricePerHour'>Price Per Hour *</label>
                     </div>
                 </div>
                 <div className='col-3'>
@@ -149,7 +149,7 @@ function CreateInventory() {
                             onChange={e => setData({ ...data, pricePerDay: e.target.value})}
                             required
                         />
-                        <label htmlFor='pricePerDay'>Price Per Day</label>
+                        <label htmlFor='pricePerDay'>Price Per Day *</label>
                     </div>
                 </div>
                 <div className='col-3'>
@@ -162,7 +162,7 @@ function CreateInventory() {
                             onChange={e => setData({ ...data, pricePerMonth: e.target.value})}
                             required
                         />
-                        <label htmlFor='pricePerMonth'>Price Per Month</label>
+                        <label htmlFor='pricePerMonth'>Price Per Month *</label>
                     </div>
                 </div>
                 <div className='col-3'>

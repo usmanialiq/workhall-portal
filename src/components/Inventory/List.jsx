@@ -23,7 +23,7 @@ function InventoryList() {
         } catch (error) {
             swal('Failed', error.response.data.message, 'error').then(() => history.push('/inventory/new'));
         }
-    }, [title, category, location]);
+    }, [title, category, location, history]);
 
     const fetchLocations = useCallback(async () => {
         try {
@@ -32,7 +32,7 @@ function InventoryList() {
         } catch (error) {
             swal('Failed', error.response.data.message, 'error').then(() => history.push('/locations/new'));
         }
-    }, []);
+    }, [history]);
 
     useEffect(() => {
         fetchInventory();

@@ -80,7 +80,7 @@ function CreateLocation() {
                             onChange={e => setData({ ...data, title: e.target.value})}
                             required
                         />
-                        <label htmlFor='title'>Title</label>
+                        <label htmlFor='title'>Title *</label>
                     </div>
                 </div>
                 <div className='col-6'>
@@ -93,7 +93,7 @@ function CreateLocation() {
                             onChange={e => setData({ ...data, address: e.target.value})}
                             required
                         />
-                        <label htmlFor='address'>Address</label>
+                        <label htmlFor='address'>Address *</label>
                     </div>
                 </div>
                 <div className='col-6'>
@@ -101,7 +101,7 @@ function CreateLocation() {
                         <select className='form-select' id='users' required onChange={e => setData({ ...data, manager: e.target.value})}>
                             {usersData.map((each) => <option key={each._id} value={each._id}>{each.firstName} {each.lastName}</option>)}
                         </select>
-                        <label htmlFor='users'>Manager</label>
+                        <label htmlFor='users'>Manager *</label>
                     </div>
                 </div>
                 <div className='col-6'>
@@ -114,7 +114,7 @@ function CreateLocation() {
                             onChange={e => setData({ ...data, phone: e.target.value})}
                             required
                         />
-                        <label htmlFor='phone'>Phone</label>
+                        <label htmlFor='phone'>Phone *</label>
                     </div>
                 </div>
                 <div className='col-6'>
@@ -127,7 +127,7 @@ function CreateLocation() {
                             placeholder='Paste the google location here'
                             required
                         ></textarea>
-                        <label htmlFor='mapLocation'>Map Location</label>
+                        <label htmlFor='mapLocation'>Map Location *</label>
                     </div>
                 </div>
                 <div className='col-6'></div>

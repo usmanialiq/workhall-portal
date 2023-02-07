@@ -35,7 +35,7 @@ function Community() {
         <div className='container w-75 m-auto mt-5'>
             <div className='row mb-3'>
                 <div className='col-4'>
-                    <h2>Users</h2>
+                    <h2>Members</h2>
                 </div>
                 <div className='col-4' />
                 <div className='col-4 text-end'>
@@ -50,7 +50,7 @@ function Community() {
             {data.length ? (
                 <div className='row'>
                     {data.map((each) => (
-                        <div className='col-sm-12 col-md-6' key={each._id}>
+                        <div className='col-sm-12 col-md-4' key={each._id}>
                             <div className='card'>
                                 <div className='card-body'>
                                     <UserProfile data={each} />

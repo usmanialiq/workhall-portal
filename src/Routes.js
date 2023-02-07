@@ -15,6 +15,7 @@ import InventoryBookingList from './components/Bookings/ByInventory';
 import UserBookingList from './components/Bookings/ByUser';
 import LocationBookingList from './components/Bookings/ByLocation';
 import Community from './pages/community';
+import CreateBooking from './components/Bookings/Create';
 
 export const Routes = () => (
     <Switch>
@@ -29,6 +30,7 @@ export const Routes = () => (
         <PrivateRoute exact component={CreateInventory} path='/inventory/new' />
         <PrivateRoute exact component={CreateInventory} path='/inventory/:id' />
         <PrivateRoute exact component={BookingList} path='/bookings' />
+        <PrivateRoute exact component={CreateBooking} path='/bookings/new' />
         <PrivateRoute exact component={InventoryBookingList} path='/bookings/inventory/:id' />
         <PrivateRoute exact component={UserBookingList} path='/bookings/user/:id' />
         <PrivateRoute exact component={LocationBookingList} path='/bookings/location/:id' />

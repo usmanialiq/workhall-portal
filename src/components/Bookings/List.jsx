@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import swal from 'sweetalert';
 import moment from 'moment';
-import { FiMoreVertical } from 'react-icons/fi'
+import { FiMoreVertical, FiPlus } from 'react-icons/fi';
 import { bookings } from '../../config/api-routes';
 import { InvoicePdf } from '../Invoice';
 
@@ -47,10 +47,10 @@ function BookingList() {
     return (
         <div className='users container w-75 m-auto mt-5'>
             <div className='row mb-3'>
-                <div className='col-3'>
+                <div className='col-2'>
                     <h2>Bookings</h2>
                 </div>
-                <div className='col-9'>
+                <div className='col-10'>
                     <div className='row align-items-center'>
                         <div className='col-3'>
                             Date from
@@ -77,12 +77,15 @@ function BookingList() {
                                 <option value='other'>Other</option>
                             </select>
                         </div>
-                        <div className='col-2'>
+                        <div className='col-1'>
                             Paid
                             <select className='form-select' onChange={e => setIsPaid(e.target.value)}>
                                 <option value='0'>No</option>
                                 <option value='1'>Yes</option>
                             </select>
+                        </div>
+                        <div className='col-1'>
+                            <Link to='/bookings/new' className='btn btn-primary btn-wh mt-4'><FiPlus /></Link>
                         </div>
                     </div>
                 </div>
