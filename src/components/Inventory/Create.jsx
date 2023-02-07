@@ -3,6 +3,7 @@ import axios from 'axios';
 import swal from 'sweetalert';
 import { useHistory, useParams } from 'react-router-dom';
 import { inventory, locations } from '../../config/api-routes';
+import { categories } from './List';
 
 function CreateInventory() {
     const [data, setData] = useState({
@@ -93,27 +94,34 @@ function CreateInventory() {
                 </div>
                 <div className='col-6'>
                     <div className='form-floating mb-3'>
-                        <input 
-                            type='text' 
-                            className='form-control' 
+                        <select 
+                            className='form-select' 
                             id='category' 
                             value={data.category}
-                            onChange={e => setData({ ...data, category: e.target.value})}
-                            required
-                        />
+                            required 
+                            onChange={e => setData({ ...data, category: e.target.value})}>
+                                <option></option>
+                            {categories.map((each, idx) => <option key={idx} value={each}>{each}</option>)}
+                        </select>
                         <label htmlFor='category'>Category</label>
                     </div>
                 </div>
                 <div className='col-6'>
                     <div className='form-floating mb-3'>
-                        <select className='form-select' id='locations' required onChange={e => setData({ ...data, location: e.target.value})}>
+                        <select 
+                            className='form-select' 
+                            id='locations' 
+                            value={data.location}
+                            required 
+                            onChange={e => setData({ ...data, location: e.target.value})}>
+                            <option></option>
                             {locationsData.map((each) => <option key={each._id} value={each._id}>{each.title}</option>)}
                         </select>
                         <label htmlFor='locations'>Location</label>
                     </div>
                 </div>
                 <div className='col-6'></div>
-                <div className='col-3'>
+                <div className='col-6'>
                     <div className='form-floating mb-3'>
                         <input 
                             type='number' 
@@ -126,7 +134,7 @@ function CreateInventory() {
                         <label htmlFor='pricePerMin'>Price Per Min</label>
                     </div>
                 </div>
-                <div className='col-3'>
+                <div className='col-6'>
                     <div className='form-floating mb-3'>
                         <input 
                             type='number' 
@@ -139,7 +147,7 @@ function CreateInventory() {
                         <label htmlFor='pricePerHour'>Price Per Hour</label>
                     </div>
                 </div>
-                <div className='col-3'>
+                <div className='col-6'>
                     <div className='form-floating mb-3'>
                         <input 
                             type='number' 
@@ -152,7 +160,7 @@ function CreateInventory() {
                         <label htmlFor='pricePerDay'>Price Per Day</label>
                     </div>
                 </div>
-                <div className='col-3'>
+                <div className='col-6'>
                     <div className='form-floating mb-3'>
                         <input 
                             type='number' 

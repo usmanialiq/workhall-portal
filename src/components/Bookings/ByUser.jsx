@@ -6,7 +6,7 @@ import moment from 'moment';
 import { FiMoreVertical } from 'react-icons/fi'
 import { bookings } from '../../config/api-routes';
 
-const header = ['Start Date', 'End Date', 'Amount', 'Payment Mode', 'Paid'];
+const header = ['Start Date', 'End Date', 'Amount', 'Payment Mode', 'Paid', 'Created At'];
 
 function UserBookingList() {
     const [data, setData] = useState([]);
@@ -102,6 +102,7 @@ function UserBookingList() {
                                         <td>{each.amount}</td>
                                         <td>{each.paymentMode}</td>
                                         <td>{each.isPaid ? 'Yes': 'No'}</td>
+                                        <td>{moment(each.createdAt).format('DD-MMM-YYYY')}</td>
                                         <td className='text-end'>
                                             <div className="dropdown">
                                                 <span className="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
