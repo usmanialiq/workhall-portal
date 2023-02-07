@@ -6,7 +6,7 @@ import swal from 'sweetalert';
 import { inventory, locations } from '../../config/api-routes';
 
 const header = ['Title', 'Category', '$/hr', '$/day', '$/month', 'Location'];
-const categories = ['Open', 'Exclusive', 'Meetings'];
+export const categories = ['Open', 'Exclusive', 'Meetings'];
 
 function InventoryList() {
     const [data, setData] = useState([]);

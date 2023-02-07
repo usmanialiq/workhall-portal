@@ -11,6 +11,7 @@ function CreateLocation() {
         mapLocation: '',
         phone: '',
         manager: '',
+        desc: '',
     });
     const [usersData, setUsers] = useState([]);
     const [isEdit, setEdit] = useState(false);
@@ -62,6 +63,7 @@ function CreateLocation() {
                 }
             }
         } catch (error) {
+            console.log("🚀 ~ file: Create.jsx:65 ~ handleSubmit ~ error", error)
             swal('Failed', error.response.data.message, 'error');
         }
     }
@@ -98,8 +100,14 @@ function CreateLocation() {
                 </div>
                 <div className='col-6'>
                     <div className='form-floating mb-3'>
-                        <select className='form-select' id='users' required onChange={e => setData({ ...data, manager: e.target.value})}>
-                            {usersData.map((each) => <option key={each._id} value={each._id}>{each.firstName} {each.lastName}</option>)}
+                        <select 
+                            className='form-select' 
+                            id='users' 
+                            required 
+                            value={data.manager}
+                            onChange={e => setData({ ...data, manager: e.target.value})}>
+                            <option></option>
+                            {usersData.map((each, idx) => <option key={each._id} value={each._id}>{each.firstName} {each.lastName}</option>)}
                         </select>
                         <label htmlFor='users'>Manager *</label>
                     </div>
@@ -117,7 +125,20 @@ function CreateLocation() {
                         <label htmlFor='phone'>Phone *</label>
                     </div>
                 </div>
-                <div className='col-6'>
+                <div className='col-12'>
+                    <div className='form-floating mb-3'>
+                        <textarea 
+                            className='form-control c-textarea' 
+                            id='desc' 
+                            value={data.desc}
+                            onChange={e => setData({ ...data, desc: e.target.value})}
+                            placeholder='Set description of the location'
+                            required
+                        ></textarea>
+                        <label htmlFor='desc'>Description</label>
+                    </div>
+                </div>
+                <div className='col-12'>
                     <div className='form-floating mb-3'>
                         <textarea 
                             className='form-control' 
@@ -130,7 +151,6 @@ function CreateLocation() {
                         <label htmlFor='mapLocation'>Map Location *</label>
                     </div>
                 </div>
-                <div className='col-6'></div>
                 <div className='col-3'>
                     <button className='btn btn-primary btn-wh w-100' onClick={handleSubmit}>Submit</button>
                 </div>

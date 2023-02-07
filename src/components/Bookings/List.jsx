@@ -4,10 +4,11 @@ import { useCallback, useEffect, useState } from 'react';
 import swal from 'sweetalert';
 import moment from 'moment';
 import { FiMoreVertical, FiPlus } from 'react-icons/fi';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import { bookings } from '../../config/api-routes';
-import { InvoicePdf } from '../Invoice';
+import Invoice from '../Invoice';
 
-const header = ['Customer', 'Start Date', 'End Date', 'Amount', 'Payment Mode', 'Paid'];
+const header = ['Customer', 'Start Date', 'End Date', 'Amount', 'Payment Mode', 'Paid', 'Created At'];
 
 function BookingList() {
     const [data, setData] = useState([]);
@@ -43,6 +44,12 @@ function BookingList() {
     useEffect(() => {
         fetchBookings();
     }, [fetchBookings]);
+
+    const handlePDF = (id) => {
+        const invoice = data.filter((each) => each._id === id)[0];
+        console.log("🚀 ~ file: List.jsx:48 ~ handlePDF ~ invoice", invoice);
+        return invoice;
+    };
 
     return (
         <div className='users container w-75 m-auto mt-5'>
@@ -114,6 +121,7 @@ function BookingList() {
                                         <td>{each.amount}</td>
                                         <td>{each.paymentMode}</td>
                                         <td>{each.isPaid ? 'Yes': 'No'}</td>
+                                        <td>{moment(each.createdAt).format('DD-MMM-YYYY')}</td>
                                         <td className='text-end'>
                                             <div className="dropdown">
                                                 <span className="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -122,7 +130,14 @@ function BookingList() {
                                                 <ul className="dropdown-menu">
                                                     <li><Link to={'/bookings/' + each._id} className="dropdown-item">Manage</Link></li>
                                                     <li><button className="dropdown-item" type="button">Mark as paid</button></li>
-                                                    <li><button className="dropdown-item" type="button"><InvoicePdf /></button></li>
+                                                    <li>
+                                                        <PDFDownloadLink 
+                                                            document={<Invoice data={each} />}
+                                                            className="dropdown-item" 
+                                                            type="button">
+                                                                {({ loading }) => loading ? 'Loading invoice ...' : 'Download'}
+                                                        </PDFDownloadLink>
+                                                    </li>
                                                 </ul>
                                             </div></td>
                                     </tr>

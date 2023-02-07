@@ -1,4 +1,4 @@
-import { Page, Document, Image, StyleSheet, PDFViewer } from '@react-pdf/renderer';
+import { Page, Document, Image, StyleSheet, Text, View } from '@react-pdf/renderer';
 import WorkHallImage from '../../assets/logo.png';
 
 const styles = StyleSheet.create({
@@ -23,14 +23,11 @@ const Invoice = ({ data }) => (
     <Document>
         <Page size='A4' style={styles.page}>
             <Image style={styles.logo} src={WorkHallImage} />
+            <View style={styles.section}>
+                <Text>{JSON.stringify(data)}</Text>
+            </View>
         </Page>
     </Document>
-);
-
-export const InvoicePdf = ({ invoice }) => (
-    <PDFViewer width={1000} height={600}>
-        {invoice}
-    </PDFViewer>
 );
 
 export default Invoice;
