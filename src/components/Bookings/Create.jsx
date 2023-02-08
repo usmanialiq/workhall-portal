@@ -17,7 +17,7 @@ function CreateBooking() {
         endDate: moment().format('yyyy-MM-DD'),
         hoursFrom: moment().format('HH:mm:ss'),
         hoursTo: moment().add('hours', 1).format('HH:mm:ss'),
-        isMonthly: false,
+        isMonthly: true,
         amount: 0,
         isPaid: false,
         paymentMode: 'cash',
@@ -26,12 +26,7 @@ function CreateBooking() {
         createdBy: '',
         notes: '',
     });
-    const [amountFilters, setAmountFilters] = useState({
-        isPerMonth: true,
-        isPerDay: false,
-        isPerHour: false,
-        isPerMin: false,
-    })
+    const [criteria, setCriteria] = useState(1);
     const [locationsData, setLocations] = useState([]);
     const [inventoryData, setInventory] = useState([]);
     const [usersData, setUsers] = useState([]);
@@ -92,33 +87,38 @@ function CreateBooking() {
         // }
     };
 
-    const handleAmount = (e) => {
+    const handleChange = (e) => {
         const val = e.target.value;
+        setPayload({ ...payload, isMonthly: +val === 1 });
+        setCriteria(+val);
+        handleAmount();
+    };
+
+    const handleAmount = () => {
         let amount = 0;
+        const inventory = inventoryData.filter((each) => each._id = payload.inventory)[0];
         const valueOf = {
             startDate: moment(payload.startDate).valueOf(),
             endDate: moment(payload.endDate).valueOf(),
             hoursFrom: moment(payload.startDate + ':' + payload.hoursFrom).valueOf(),
             hoursTo: moment(payload.endDate + ':' + payload.hoursTo).valueOf(),
         };
-        setPayload({ ...payload, isMonthly: false });
-        if (val == 1) {
-            setAmountFilters({ isPerMonth: true, })
-            setPayload({ ...payload, isMonthly: true });
-            amount = inventoryData.filter((each) => each._id = payload.inventory)[0].pricePerMonth * diffInMonths(valueOf.startDate, valueOf.endDate);
-            console.log("🚀 ~ file: Create.jsx:103 ~ handleAmount ~ inventoryData.filter((each) => each._id = payload.inventory)[0]", inventoryData.filter((each) => each._id = payload.inventory)[0])
+        if (criteria === 1) {
+            amount = inventory.pricePerMonth * 
+                diffInMonths(valueOf.startDate, valueOf.endDate);
         }
-        if (val == 2) {
-            amount = inventoryData.filter((each) => each._id = payload.inventory)[0].pricePerDay *
-            diffInDays(valueOf.startDate, valueOf.endDate)
+        if (criteria === 2) {
+            amount = inventory.pricePerDay *
+                diffInDays(valueOf.startDate, valueOf.endDate);
         }
-        if (val == 3) {
-            amount = inventoryData.filter((each) => each._id = payload.inventory)[0].pricePerHour *
-            diffInHours(valueOf.hoursFrom, valueOf.hoursTo)
+        if (criteria === 3) {
+            amount = inventory.pricePerHour *
+                diffInHours(valueOf.hoursFrom, valueOf.hoursTo);
         }
         console.log("🚀 ~ file: Create.jsx:110 ~ handleAmount ~ amount", amount)        
-        setPayload({ ...payload, amount });
-    };
+        // setPayload({ ...payload, amount });
+        return;
+    }
 
     return (
         <div className='container w-50 bg-white p-3 rounded m-auto mt-5'>
@@ -131,7 +131,7 @@ function CreateBooking() {
                             id='locations' 
                             required 
                             value={payload.location}
-                            onChange={e => { setPayload({ ...payload, location: e.target.value }); fetchInventory(); }}>
+                            onChange={async e => { setPayload({ ...payload, location: e.target.value }); await fetchInventory(); }}>
                                 <option></option>
                                 {locationsData
                                     .map((each) => <option key={each._id} value={each._id}>{each.title}</option>
@@ -147,7 +147,7 @@ function CreateBooking() {
                             id='inventory' 
                             required 
                             value={payload.inventory}
-                            onChange={e => setPayload({ ...payload, inventory: e.target.value })}>
+                            onChange={e => { setPayload({ ...payload, inventory: e.target.value }); }}>
                                 <option></option>
                                 {inventoryData
                                     .map((each) => <option key={each._id} value={each._id}>{each.title}</option>
@@ -163,7 +163,7 @@ function CreateBooking() {
                             className='form-control' 
                             id='startDate' 
                             value={payload.startDate}
-                            onChange={e => setPayload({ ...payload, startDate: e.target.value })}
+                            onChange={e => { setPayload({ ...payload, startDate: e.target.value }); handleAmount();}}
                             required
                         />
                         <label htmlFor='startDate'>Start Date *</label>
@@ -176,7 +176,7 @@ function CreateBooking() {
                             className='form-control' 
                             id='endDate' 
                             value={payload.endDate}
-                            onChange={e => setPayload({ ...payload, endDate: e.target.value })}
+                            onChange={e => { setPayload({ ...payload, endDate: e.target.value }); handleAmount();}}
                             required
                         />
                         <label htmlFor='endDate'>End Date *</label>
@@ -189,7 +189,7 @@ function CreateBooking() {
                             className='form-control' 
                             id='hoursFrom' 
                             value={payload.hoursFrom}
-                            onChange={e => setPayload({ ...payload, hoursFrom: e.target.value })}
+                            onChange={e => { setPayload({ ...payload, hoursFrom: e.target.value }); handleAmount();}}
                             required
                         />
                         <label htmlFor='hoursFrom'>Hours from</label>
@@ -202,7 +202,7 @@ function CreateBooking() {
                             className='form-control' 
                             id='hoursTo' 
                             value={payload.hoursTo}
-                            onChange={e => setPayload({ ...payload, hoursTo: e.target.value })}
+                            onChange={e => { setPayload({ ...payload, hoursTo: e.target.value }); handleAmount();}}
                             required
                         />
                         <label htmlFor='hoursTo'>Hours to</label>
@@ -219,53 +219,6 @@ function CreateBooking() {
                             required
                         />
                         <label htmlFor='amount'>Amount *</label>
-                    </div>
-                </div>
-                <div className='col-6'></div>
-                <div className='col-12 mb-3'>
-                    <div className="form-check form-check-inline">
-                        <input 
-                            className="form-check-input" 
-                            type="radio" 
-                            name="inlineRadioOptions" 
-                            id="subscription1" 
-                            value="1" 
-                            onChange={handleAmount}
-                        />
-                        <label className="form-check-label" for="subscription1">Per Month</label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                        <input 
-                            className="form-check-input" 
-                            type="radio" 
-                            name="inlineRadioOptions" 
-                            id="subscription2" 
-                            value="2" 
-                            onChange={handleAmount}
-                        />
-                        <label className="form-check-label" for="subscription2">Per Day</label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                        <input 
-                            className="form-check-input" 
-                            type="radio" 
-                            name="inlineRadioOptions" 
-                            id="subscription3" 
-                            value="3" 
-                            onChange={handleAmount}
-                        />
-                        <label className="form-check-label" for="subscription3">Per Hour</label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                        <input 
-                            className="form-check-input" 
-                            type="radio" 
-                            name="inlineRadioOptions" 
-                            id="subscription4" 
-                            value="4" 
-                            onChange={handleAmount}
-                        />
-                        <label className="form-check-label" for="subscription4">Per Min</label>
                     </div>
                 </div>
                 <div className='col-6'>
@@ -298,6 +251,57 @@ function CreateBooking() {
                             )}
                         />
                         <label htmlFor='users'>Search User *</label>
+                    </div>
+                </div>
+                <div className='col-12 mb-3'>
+                    <span>Select costing criteria </span>
+                    <div className="form-check form-check-inline">
+                        <input 
+                            className="form-check-input" 
+                            type="radio" 
+                            name="inlineRadioOptions" 
+                            id="subscription1" 
+                            value="1" 
+                            checked={criteria === 1}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label" htmlFor="subscription1">Per Month</label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input 
+                            className="form-check-input" 
+                            type="radio" 
+                            name="inlineRadioOptions" 
+                            id="subscription2" 
+                            value="2" 
+                            checked={criteria === 2}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label" htmlFor="subscription2">Per Day</label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input 
+                            className="form-check-input" 
+                            type="radio" 
+                            name="inlineRadioOptions" 
+                            id="subscription3" 
+                            value="3" 
+                            checked={criteria === 3}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label" htmlFor="subscription3">Per Hour</label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input 
+                            className="form-check-input" 
+                            type="radio" 
+                            name="inlineRadioOptions" 
+                            id="subscription4" 
+                            value="4" 
+                            checked={criteria === 4}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label" htmlFor="subscription4">Per Min</label>
                     </div>
                 </div>
                 <div className='col-6'>
@@ -344,7 +348,7 @@ function CreateBooking() {
                     </div>
                 </div>
                 <div className='col-3'>
-                    <button className='btn btn-primary btn-wh w-100' onClick={handleSubmit}>Submit</button>
+                    <button className='btn btn-primary btn-wh w-100' disabled={!payload.amount} onClick={handleSubmit}>Submit</button>
                 </div>
             </div>
         </div>

@@ -34,8 +34,8 @@ main {
   color: rgb(36, 36, 36) !important;
 }
 
-.sidebar .username,
-.sidebar .dropdown-item {
+.navbar-nav .username,
+.navbar-nav .dropdown-item {
   color: var(--primary-color) !important;
   font-weight: 500;
   cursor: pointer;
