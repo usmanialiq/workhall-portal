@@ -1,14 +1,58 @@
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, Fragment } from 'react';
 import swal from 'sweetalert';
 import moment from 'moment';
 import { FiMoreVertical, FiPlus } from 'react-icons/fi';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PDFDownloadLink, PDFViewer, BlobProvider } from '@react-pdf/renderer';
 import { bookings } from '../../config/api-routes';
-import Invoice from '../Invoice';
+import Invoice from '../Invoice/invoice';
 
 const header = ['Customer', 'Start Date', 'End Date', 'Amount', 'Payment Mode', 'Paid', 'Created At'];
+
+const invoiceData = {
+    id: "5df3180a09ea16dc4b95f910",
+    invoice_no: "201906-28",
+    balance: "$2,283.74",
+    company: "MANTRIX",
+    email: "susanafuentes@mantrix.com",
+    phone: "+1 (872) 588-3809",
+    address: "922 Campus Road, Drytown, Wisconsin, 1986",
+    trans_date: "2019-09-12",
+    due_date: "2019-10-12",
+    items: [
+        {
+            sno: 1,
+            desc: "ad sunt culpa occaecat qui",
+            qty: 5,
+            rate: 405.89,
+        },
+        {
+            sno: 2,
+            desc: "cillum quis sunt qui aute",
+            qty: 5,
+            rate: 373.11,
+        },
+        {
+            sno: 3,
+            desc: "ea commodo labore culpa irure",
+            qty: 5,
+            rate: 458.61,
+        },
+        {
+            sno: 4,
+            desc: "nisi consequat et adipisicing dolor",
+            qty: 10,
+            rate: 725.24,
+        },
+        {
+            sno: 5,
+            desc: "proident cillum anim elit esse",
+            qty: 4,
+            rate: 141.02,
+        },
+    ],
+};
 
 function BookingList() {
     const [data, setData] = useState([]);
@@ -61,17 +105,17 @@ function BookingList() {
                     <div className='row align-items-center'>
                         <div className='col-3'>
                             Date from
-                            <input 
-                                type='date' 
-                                className='form-control d-inline' 
+                            <input
+                                type='date'
+                                className='form-control d-inline'
                                 onChange={e => { setStartDate(new Date(e.target.value).valueOf()); fetchBookings(); }}
                             />
                         </div>
                         <div className='col-3'>
                             Date to
-                            <input 
-                                type='date' 
-                                className='form-control d-inline' 
+                            <input
+                                type='date'
+                                className='form-control d-inline'
                                 onChange={e => { setEndDate(new Date(e.target.value).valueOf()); fetchBookings(); }}
                             />
                         </div>
@@ -115,12 +159,12 @@ function BookingList() {
                                 {data.map((each = {}, idx) => (
                                     <tr key={idx}>
                                         <th scope='row'>{idx + 1}</th>
-                                        <td>{each.createdBy.firstName + ' ' + each.createdBy.lastName }</td>
+                                        <td>{each.createdBy.firstName + ' ' + each.createdBy.lastName}</td>
                                         <td>{moment(each.startDate).format('DD-MMM-YYYY')}</td>
                                         <td>{moment(each.endDate).format('DD-MMM-YYYY')}</td>
                                         <td>{each.amount}</td>
                                         <td>{each.paymentMode}</td>
-                                        <td>{each.isPaid ? 'Yes': 'No'}</td>
+                                        <td>{each.isPaid ? 'Yes' : 'No'}</td>
                                         <td>{moment(each.createdAt).format('DD-MMM-YYYY')}</td>
                                         <td className='text-end'>
                                             <div className="dropdown">
@@ -131,11 +175,18 @@ function BookingList() {
                                                     <li><Link to={'/bookings/' + each._id} className="dropdown-item">Manage</Link></li>
                                                     <li><button className="dropdown-item" type="button">Mark as paid</button></li>
                                                     <li>
-                                                        <PDFDownloadLink 
-                                                            document={<Invoice data={each} />}
-                                                            className="dropdown-item" 
-                                                            type="button">
-                                                                {({ loading }) => loading ? 'Loading invoice ...' : 'Download'}
+                                                        <BlobProvider
+                                                            document={<Invoice invoice={invoiceData} />}    // invoice data is a hardcoded const declared above which is to be replaced with real Bookings data 
+                                                            className="dropdown-item">
+                                                            {({ loading, url }) => (<a href={url} target="_blank" type="button" className="dropdown-item">{loading ? 'Loading invoice ...' : 'Open invoice in new tab'}</a>)}
+                                                        </BlobProvider>
+                                                    </li>
+                                                    <li>
+                                                        <PDFDownloadLink
+                                                            document={<Invoice invoice={invoiceData} />}    // invoice data is a hardcoded const declared above which is to be replaced with real Bookings data 
+                                                            className="dropdown-item"
+                                                            type="button" >
+                                                            {({ loading }) => loading ? "Loading document..." : "Download invoice PDF"}
                                                         </PDFDownloadLink>
                                                     </li>
                                                 </ul>
