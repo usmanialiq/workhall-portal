@@ -1,9 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { logoutUser } from '../store/actions/auth';
 
 function Navbar() {
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
+    // console.log(auth);
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light border-bottom">
@@ -19,7 +21,7 @@ function Navbar() {
                                 <span className='username'>{auth.user.name}</span>
                             </span>
                             <ul className='dropdown-menu text-small shadow' aria-labelledby='dropdownUser1'>
-                                <li><span className='dropdown-item'>My Profile</span></li>
+                                <li><Link to={'/users/profile/' + auth.user.id} className='dropdown-item'>My Profile</Link></li>
                                 <li><span className='dropdown-item' onClick={() => dispatch(logoutUser())}>Sign out</span></li>
                             </ul>
                         </li>
