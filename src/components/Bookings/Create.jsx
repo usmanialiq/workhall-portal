@@ -12,9 +12,10 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 const paymentModes = ['Cash', 'Cheque', 'Other'];
 
 function CreateBooking() {
+    const [criteria, setCriteria] = useState(1);
     const [payload, setPayload] = useState({
         startDate: moment().format('yyyy-MM-DD'),
-        endDate: moment().format('yyyy-MM-DD'),
+        endDate: moment().add('M', 1).format('yyyy-MM-DD'),
         hoursFrom: moment().format('HH:mm:ss'),
         hoursTo: moment().add('hours', 1).format('HH:mm:ss'),
         isMonthly: true,
@@ -26,7 +27,6 @@ function CreateBooking() {
         createdBy: '',
         notes: '',
     });
-    const [criteria, setCriteria] = useState(1);
     const [locationsData, setLocations] = useState([]);
     const [inventoryData, setInventory] = useState([]);
     const [usersData, setUsers] = useState([]);
@@ -65,37 +65,45 @@ function CreateBooking() {
     }, []);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        const total = handleAmount(e);
 
         let dataToSubmit = payload;
         dataToSubmit = {
             ...dataToSubmit,
             startDate: moment(payload.startDate).valueOf(),
             endDate: moment(payload.endDate).valueOf(),
-            hoursFrom: moment(payload.startDate + ':' + payload.hoursFrom).valueOf(),
-            hoursTo: moment(payload.endDate + ':' + payload.hoursTo).valueOf(),
+            amount: total,
         };
-        console.log("🚀 ~ file: Create.jsx:69 ~ handleSubmit ~ dataToSubmit", dataToSubmit)
+        if (criteria === 3) {
+            dataToSubmit = {
+                ...dataToSubmit,
+                hoursFrom: moment(payload.startDate + ':' + payload.hoursFrom).valueOf(),
+                hoursTo: moment(payload.endDate + ':' + payload.hoursTo).valueOf(),
+            };
+        } else {
+            delete dataToSubmit.hoursFrom;
+            delete dataToSubmit.hoursTo;
+        }
 
-        // try {
-        //     const { data } = await axios.post(bookings, dataToSubmit);
-        //     if (data) {
-        //         swal('Good Job!', 'Booking created successfully', 'success');
-        //     }
-        // } catch (error) {
-        //     swal('Failed', error.response.data.message, 'error');
-        // }
+        try {
+            const { data } = await axios.post(bookings, dataToSubmit);
+            if (data) {
+                swal('Good Job!', 'Booking created successfully', 'success').then(() => history.push('/bookings'));
+            }
+        } catch (error) {
+            swal('Failed', error.response.data.message, 'error');
+        }
     };
 
     const handleChange = (e) => {
         const val = e.target.value;
         setPayload({ ...payload, isMonthly: +val === 1 });
         setCriteria(+val);
-        handleAmount();
     };
 
-    const handleAmount = () => {
-        let amount = 0;
+    const handleAmount = (e) => {
+        e.preventDefault();
+        let total = 0;
         const inventory = inventoryData.filter((each) => each._id = payload.inventory)[0];
         const valueOf = {
             startDate: moment(payload.startDate).valueOf(),
@@ -104,26 +112,86 @@ function CreateBooking() {
             hoursTo: moment(payload.endDate + ':' + payload.hoursTo).valueOf(),
         };
         if (criteria === 1) {
-            amount = inventory.pricePerMonth * 
+            if (!diffInMonths(valueOf.startDate, valueOf.endDate)) {
+                return swal('Not allowed', 'Start & End Months cannot be same', 'error');
+            }
+            total = inventory.pricePerMonth * 
                 diffInMonths(valueOf.startDate, valueOf.endDate);
         }
         if (criteria === 2) {
-            amount = inventory.pricePerDay *
+            if (!diffInDays(valueOf.startDate, valueOf.endDate)) {
+                return swal('Not allowed', 'Start & End Days cannot be same', 'error');
+            }
+            total = inventory.pricePerDay *
                 diffInDays(valueOf.startDate, valueOf.endDate);
         }
         if (criteria === 3) {
-            amount = inventory.pricePerHour *
+            if (!diffInHours(valueOf.hoursFrom, valueOf.hoursTo)) {
+                return swal('Not allowed', 'Hours from and to cannot be same', 'error');
+            }
+            total = inventory.pricePerHour *
                 diffInHours(valueOf.hoursFrom, valueOf.hoursTo);
         }
-        console.log("🚀 ~ file: Create.jsx:110 ~ handleAmount ~ amount", amount)        
-        // setPayload({ ...payload, amount });
-        return;
-    }
+        setPayload({ ...payload, amount: total }); 
+
+        return total;
+    };
 
     return (
         <div className='container w-50 bg-white p-3 rounded m-auto mt-5'>
             <h2>Create new Booking</h2>
             <div className='row mt-5 justify-content-center'>
+                <div className='col-12 mb-3'>
+                    <span className='pe-3'>Select costing criteria </span>
+                    <div className="form-check form-check-inline">
+                        <input 
+                            className="form-check-input" 
+                            type="radio" 
+                            name="inlineRadioOptions" 
+                            id="subscription1" 
+                            value="1" 
+                            checked={criteria === 1}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label" htmlFor="subscription1">Per Month</label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input 
+                            className="form-check-input" 
+                            type="radio" 
+                            name="inlineRadioOptions" 
+                            id="subscription2" 
+                            value="2" 
+                            checked={criteria === 2}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label" htmlFor="subscription2">Per Day</label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input 
+                            className="form-check-input" 
+                            type="radio" 
+                            name="inlineRadioOptions" 
+                            id="subscription3" 
+                            value="3" 
+                            checked={criteria === 3}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label" htmlFor="subscription3">Per Hour</label>
+                    </div>
+                    {/* <div className="form-check form-check-inline">
+                        <input 
+                            className="form-check-input" 
+                            type="radio" 
+                            name="inlineRadioOptions" 
+                            id="subscription4" 
+                            value="4" 
+                            checked={criteria === 4}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label" htmlFor="subscription4">Per Min</label>
+                    </div> */}
+                </div>
                 <div className='col-6'>
                     <div className='form-floating mb-3'>
                         <select 
@@ -163,7 +231,8 @@ function CreateBooking() {
                             className='form-control' 
                             id='startDate' 
                             value={payload.startDate}
-                            onChange={e => { setPayload({ ...payload, startDate: e.target.value }); handleAmount();}}
+                            onChange={e => setPayload({ ...payload, startDate: e.target.value })}
+                            min={new Date().toISOString().split('T')[0]}
                             required
                         />
                         <label htmlFor='startDate'>Start Date *</label>
@@ -176,51 +245,44 @@ function CreateBooking() {
                             className='form-control' 
                             id='endDate' 
                             value={payload.endDate}
-                            onChange={e => { setPayload({ ...payload, endDate: e.target.value }); handleAmount();}}
+                            onChange={e => setPayload({ ...payload, endDate: e.target.value })}
+                            min={new Date().toISOString().split('T')[0]}
                             required
                         />
                         <label htmlFor='endDate'>End Date *</label>
                     </div>
                 </div>
-                <div className='col-6'>
-                    <div className='form-floating mb-3'>
-                        <input 
-                            type='time' 
-                            className='form-control' 
-                            id='hoursFrom' 
-                            value={payload.hoursFrom}
-                            onChange={e => { setPayload({ ...payload, hoursFrom: e.target.value }); handleAmount();}}
-                            required
-                        />
-                        <label htmlFor='hoursFrom'>Hours from</label>
-                    </div>
-                </div>
-                <div className='col-6'>
-                    <div className='form-floating mb-3'>
-                        <input 
-                            type='time' 
-                            className='form-control' 
-                            id='hoursTo' 
-                            value={payload.hoursTo}
-                            onChange={e => { setPayload({ ...payload, hoursTo: e.target.value }); handleAmount();}}
-                            required
-                        />
-                        <label htmlFor='hoursTo'>Hours to</label>
-                    </div>
-                </div>
-                <div className='col-6'>
-                    <div className='form-floating mb-3'>
-                        <input 
-                            type='number' 
-                            className='form-control' 
-                            id='amount' 
-                            value={payload.amount}
-                            onChange={e => setPayload({ ...payload, amount: e.target.value })}
-                            required
-                        />
-                        <label htmlFor='amount'>Amount *</label>
-                    </div>
-                </div>
+                {criteria === 3 && (
+                    <>
+                        <div className='col-6'>
+                            <div className='form-floating mb-3'>
+                                <input 
+                                    type='time' 
+                                    className='form-control' 
+                                    id='hoursFrom' 
+                                    value={payload.hoursFrom}
+                                    min={moment().format('HH:mm')}
+                                    onChange={e => setPayload({ ...payload, hoursFrom: e.target.value })}
+                                    required
+                                />
+                                <label htmlFor='hoursFrom'>Hours from</label>
+                            </div>
+                        </div>
+                        <div className='col-6'>
+                            <div className='form-floating mb-3'>
+                                <input 
+                                    type='time' 
+                                    className='form-control' 
+                                    id='hoursTo' 
+                                    value={payload.hoursTo}
+                                    onChange={e => setPayload({ ...payload, hoursTo: e.target.value })}
+                                    required
+                                />
+                                <label htmlFor='hoursTo'>Hours to</label>
+                            </div>
+                        </div>
+                    </>
+                )}
                 <div className='col-6'>
                     <div className='form-floating mb-3'>
                         <AsyncTypeahead 
@@ -253,57 +315,6 @@ function CreateBooking() {
                         <label htmlFor='users'>Search User *</label>
                     </div>
                 </div>
-                <div className='col-12 mb-3'>
-                    <span>Select costing criteria </span>
-                    <div className="form-check form-check-inline">
-                        <input 
-                            className="form-check-input" 
-                            type="radio" 
-                            name="inlineRadioOptions" 
-                            id="subscription1" 
-                            value="1" 
-                            checked={criteria === 1}
-                            onChange={handleChange}
-                        />
-                        <label className="form-check-label" htmlFor="subscription1">Per Month</label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                        <input 
-                            className="form-check-input" 
-                            type="radio" 
-                            name="inlineRadioOptions" 
-                            id="subscription2" 
-                            value="2" 
-                            checked={criteria === 2}
-                            onChange={handleChange}
-                        />
-                        <label className="form-check-label" htmlFor="subscription2">Per Day</label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                        <input 
-                            className="form-check-input" 
-                            type="radio" 
-                            name="inlineRadioOptions" 
-                            id="subscription3" 
-                            value="3" 
-                            checked={criteria === 3}
-                            onChange={handleChange}
-                        />
-                        <label className="form-check-label" htmlFor="subscription3">Per Hour</label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                        <input 
-                            className="form-check-input" 
-                            type="radio" 
-                            name="inlineRadioOptions" 
-                            id="subscription4" 
-                            value="4" 
-                            checked={criteria === 4}
-                            onChange={handleChange}
-                        />
-                        <label className="form-check-label" htmlFor="subscription4">Per Min</label>
-                    </div>
-                </div>
                 <div className='col-6'>
                     <div className='form-floating mb-3'>
                         <select 
@@ -320,6 +331,18 @@ function CreateBooking() {
                         <label htmlFor='paymentMode'>Payment Mode *</label>
                     </div>
                 </div>
+                <div className='col-9'>
+                    <div className='form-floating mb-3'>
+                        <textarea 
+                            className='form-control' 
+                            id='notes' 
+                            value={payload.notes}
+                            onChange={e => setPayload({ ...payload, notes: e.target.value})}
+                            placeholder='Add details for the payment'
+                        ></textarea>
+                        <label htmlFor='notes'>Notes</label>
+                    </div>
+                </div>
                 <div className='col-3'>
                     <div className="form-check pt-3">
                         <input 
@@ -334,21 +357,32 @@ function CreateBooking() {
                         </label>
                     </div>
                 </div>
-                <div className='col-3' />
-                <div className='col-12'>
+                <div className='col-6'>
                     <div className='form-floating mb-3'>
-                        <textarea 
+                        <input 
+                            type='number' 
                             className='form-control' 
-                            id='notes' 
-                            value={payload.notes}
-                            onChange={e => setPayload({ ...payload, notes: e.target.value})}
-                            placeholder='Add details for the payment'
-                        ></textarea>
-                        <label htmlFor='notes'>Notes</label>
+                            id='amount' 
+                            value={payload.amount}
+                            readOnly
+                        />
+                        <label htmlFor='amount'>Amount</label>
                     </div>
                 </div>
+                <div className='col-3 m-auto'>
+                    {!payload.amount && (
+                        <button 
+                            className='btn btn-primary btn-wh w-100' 
+                            onClick={handleAmount}>Get Amount</button>
+                    )}
+                </div>
+                <div className='col-3' />
                 <div className='col-3'>
-                    <button className='btn btn-primary btn-wh w-100' disabled={!payload.amount} onClick={handleSubmit}>Submit</button>
+                    {payload.amount > 0 && (
+                        <button 
+                            className='btn btn-primary btn-wh w-100' 
+                            onClick={handleSubmit}>Submit</button>
+                    )}
                 </div>
             </div>
         </div>
