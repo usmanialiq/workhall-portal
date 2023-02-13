@@ -8,7 +8,7 @@ import { GET_ERRORS, SET_CURRENT_USER } from './types';
 export const loginUser = userData => async dispatch => {
 	try {
 		const { data } = await axios.post(login, userData);
-		const { accessToken, id, name, email, type } = data;
+		const { accessToken, id, name, email, type, image } = data;
 		// if(user.type === 'admin') {
 		// Set Token to local storage
 		localStorage.setItem('accessToken', accessToken);
@@ -16,6 +16,7 @@ export const loginUser = userData => async dispatch => {
 		localStorage.setItem('name', name);
 		localStorage.setItem('email', email);
 		localStorage.setItem('type', type);
+		localStorage.setItem('image', image);
 
 		// Set Token to auth header
 		setAuthToken(accessToken);
@@ -49,13 +50,9 @@ export const setCurrentUser = decoded => {
 };
 
 // Log Uer Out
-export const logoutUser = (history) => dispath => {
+export const logoutUser = () => dispath => {
 	// Remove token from local storage
-	localStorage.removeItem('accessToken');
-	localStorage.removeItem('name');
-	localStorage.removeItem('id');
-	localStorage.removeItem('email');
-	localStorage.removeItem('type');
+	localStorage.clear();
 
 	// remove auth header for future requests
 	setAuthToken(false);

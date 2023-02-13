@@ -19,7 +19,7 @@ const AccountSettings = () => {
         try {
             const { data } = await axios.get(`${users}/${auth.user.id}`);
             setUser(data);
-        } catch(error) {
+        } catch (error) {
             swal('Failed', 'User not found', 'error');
         }
     }, [auth.user.id]);
@@ -29,40 +29,39 @@ const AccountSettings = () => {
     }, [fetchUser]);
 
     return (
-        <div className="container w-75">
-            <div className="row">
-                <div className="col-12 d-flex mt-4">
-                    <h2>Account</h2>
-                </div>
-                <div className="col-12 d-flex">
-                    <p>Set your account settings below</p>
-                </div>
-            </div>
+        <div className="container w-75 m-auto mt-5 pb-2">
+            <h2>Account</h2>
+            <p>Set your account settings below</p>
 
             <div className="row">
-                <ul className="col-12 d-flex justify-content-center nav nav-pills nav-justified m-2 profile-header">
-                    <li className="nav-item">
+                <ul className="nav nav-pills nav-justified m-auto w-75 p-2 ">
+                    <li className="nav-item link-dark">
                         <a
                             href="#Profile"
                             className={`nav-link ${activeTab === "Profile" ? "active" : ""}`}
+                            style={{ color: "#000" }}
                             onClick={() => handleTabChange("Profile")}
                         >
                             Profile
                         </a>
                     </li>
+                    
                     <li className="nav-item">
                         <a
                             href="#Password"
                             className={`nav-link ${activeTab === "Password" ? "active" : ""}`}
+                            style={{ color: "#000" }}
                             onClick={() => handleTabChange("Password")}
                         >
                             Password
                         </a>
                     </li>
+
                     <li className="nav-item">
                         <a
                             href="#Teams"
                             className={`nav-link ${activeTab === "Teams" ? "active" : ""}`}
+                            style={{ color: "#000" }}
                             onClick={() => handleTabChange("Teams")}
                         >
                             Teams
@@ -73,7 +72,7 @@ const AccountSettings = () => {
 
 
                 {activeTab === "Profile" && <ProfileSettings user={user} />}
-                
+
                 {activeTab === "Password" && <ChangePassword user={user} />}
             </div>
         </div>

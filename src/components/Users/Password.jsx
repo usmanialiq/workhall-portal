@@ -20,7 +20,7 @@ const ChangePassword = (user) => {
     }
 
     return (
-        <div className="container w-50 mt-5">
+        <div className="container w-50 mt-4">
             <form onSubmit={handlePasswordChange}>
                 <div className="form-group mb-4">
                     <label htmlFor="current_password">

@@ -1,24 +1,44 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
+import axios from 'axios';
+import swal from 'sweetalert';
 import CustomImageUploader from "./avatar";
 
 const ProfileSettings = ({ user }) => {
-    const [data, setData] = useState(user);
+    const [data, setData] = useState({
+        id: "",
+        firstName: "",
+        lastName: "",
+        image: "",
+        email: "",
+    });
     console.log("🚀 ~ file: Profile.jsx:6 ~ ProfileSettings ~ data", data)
+
     
-    const handleSaveChanges = (e) => {
-        e.preventDefault();
-    };
+    useEffect(() => {
+        setData({ ...user });
+    }, []);
 
     const handleFirstNameChange = (e) => {
-        // setData({ ...data, name: e.target.value });
+        e.preventDefault();
+        setData({ ...data, firstName: e.target.value });
     };
 
     const handleLastNameChange = (e) => {
-        // setData({ ...data, name: e.target.value });
+        e.preventDefault();
+        setData({ ...data, lastName: e.target.value });
     };
     
-    const handleEmailChange = (e) => {
-        // setData({ ...data, email: e.target.value });
+    const handleSaveChanges = async (e) => {
+        e.preventDefault();
+        const dataToSubmit = data;
+        try {
+            const { checkData } = await axios.put("users/account/" + user.id, dataToSubmit).then(res => {console.log(res);});
+            if (checkData) {
+                swal('Good Job!', 'User created updated', 'success');
+            }
+        } catch (error) {
+            swal('Failed', error.response.data.message, 'error');
+        }
     };
 
     const getImageToUpload = (img) => {
@@ -27,18 +47,23 @@ const ProfileSettings = ({ user }) => {
 
     return (
         <div className="container w-50">
-            <div className="row">
-                <div className="col-2 d-flex justify-content-center">
-                    <CustomImageUploader getImage={getImageToUpload} img={data.image ? data.image : ""} />
+            <div className="row mt-4 mb-4">
+                <div className="col-4 d-flex">
+                    <CustomImageUploader getImage={getImageToUpload} img={user.image ? user.image : ""} />
                 </div>
-                <div className="col-6 d-flex justify-content-center align-items-center">
-                    <h4 className="text-center">{data.firstName + ' ' + data.lastName}</h4>
+                <div className="col-6 d-flex align-items-center">
+                    <h4 className="text-center">{user.firstName + ' ' + user.lastName}</h4>
+                </div>
+                <div className="mt-2">
+                    <small> Supported formats: JPEG, PNG or GIF <br />
+                    Max size: 10 MB </small>
                 </div>
             </div>
+            <hr />
             <form onSubmit={handleSaveChanges}>
                 <div className="form-group mb-4">
                     <label htmlFor="firstName">
-                        Last Name
+                        First Name
                     </label>
                     <input
                         type="text"
@@ -73,9 +98,8 @@ const ProfileSettings = ({ user }) => {
                         className="form-control mt-2"
                         id="email"
                         placeholder="Enter email"
-                        required
+                        readOnly
                         defaultValue={data.email}
-                        onChange={handleEmailChange}
                     />
                 </div>
                 <button
