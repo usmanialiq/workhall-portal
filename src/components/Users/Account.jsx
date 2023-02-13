@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import swal from "sweetalert";
 import ChangePassword from "./Password";
@@ -15,18 +15,18 @@ const AccountSettings = () => {
         setActiveTab(tab);
     };
 
-    const fetchUser = async () => {
+    const fetchUser = useCallback(async () => {
         try {
             const { data } = await axios.get(`${users}/${auth.user.id}`);
             setUser(data);
         } catch(error) {
             swal('Failed', 'User not found', 'error');
         }
-    }
+    }, [auth.user.id]);
 
     useEffect(() => {
-        fetchUser().then(() => true);
-    }, []);
+        fetchUser();
+    }, [fetchUser]);
 
     return (
         <div className="container w-75">
