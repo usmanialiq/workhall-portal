@@ -135,3 +135,18 @@ table {
   border-color: #fff !important;
   box-shadow: none !important;
 }
+
+.profile-header {
+  background: #F8FAFB;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.image-uploader p {
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.image-uploader .img-fluid:hover {
+  cursor: pointer !important;
+}

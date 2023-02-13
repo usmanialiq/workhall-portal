@@ -21,7 +21,7 @@ function Navbar() {
                                 <span className='username'>{auth.user.name}</span>
                             </span>
                             <ul className='dropdown-menu text-small shadow' aria-labelledby='dropdownUser1'>
-                                <li><Link to={'/users/profile/' + auth.user.id} className='dropdown-item'>My Profile</Link></li>
+                                <li><Link to={'/users/account/' + auth.user.id} className='dropdown-item'>My Profile</Link></li>
                                 <li><span className='dropdown-item' onClick={() => dispatch(logoutUser())}>Sign out</span></li>
                             </ul>
                         </li>

@@ -16,7 +16,7 @@ import UserBookingList from './components/Bookings/ByUser';
 import LocationBookingList from './components/Bookings/ByLocation';
 import Community from './pages/community';
 import CreateBooking from './components/Bookings/Create';
-import UserProfile from './components/Users/Profile';
+import AccountSettings from './components/Users/Account';
 
 export const Routes = () => (
     <Switch>
@@ -24,7 +24,7 @@ export const Routes = () => (
         <Route exact component={RegisterPage} path='/register' />
         <PrivateRoute exact component={DashboardPage} path='/dashboard' />
         <PrivateRoute exact component={UserList} path='/users' />
-        <PrivateRoute exact component={UserProfile} path='/users/profile/:id' />
+        <PrivateRoute exact component={AccountSettings} path='/users/account/:id' />
         <PrivateRoute exact component={LocationList} path='/locations' />
         <PrivateRoute exact component={CreateLocation} path='/locations/new' />
         <PrivateRoute exact component={CreateLocation} path='/locations/:id' />
