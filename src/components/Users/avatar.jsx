@@ -11,15 +11,17 @@ function CustomImageUploader({ getImage, img }) {
                 preview: URL.createObjectURL(e.target.files[0]),
                 raw: e.target.files[0],
             });
+            handleImage();
         }
     };
 
     const handleImage = () => {
         getImage(image.raw);
+        console.log("🚀 ~ file: avatar.jsx:22 ~ handleImage ~ image.raw", image.raw)
     };
 
     return (
-        <div className='image-uploader row align-items-center'>
+        <div className='image-uploader'>
             <label htmlFor='upload-image-btn'>
                 {image.preview ? (
                     <img
@@ -32,9 +34,9 @@ function CustomImageUploader({ getImage, img }) {
                 ) : (
                     <img
                         src={myImage}
-                        className='rounded-circle'
-                        width={80}
-                        height={80}
+                        className='rounded-circle mb-3'
+                        width={150}
+                        height={150}
                         alt='Profile Upload PH'
                     />
                 )}

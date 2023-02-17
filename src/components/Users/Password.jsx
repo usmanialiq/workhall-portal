@@ -1,22 +1,54 @@
-import { React, useState, useEffect } from "react";
+import { React } from "react";
+import axios from 'axios';
+import swal from 'sweetalert';
+import { users } from '../../config/api-routes';
+import { useHistory } from "react-router-dom";
 
-const ChangePassword = (user) => {
-    const [password, setPassword] = useState("Abc123");
-    
-    const handlePasswordChange = (e) => {
-        { alert("Debugger") }
+const ChangePassword = ({ user }) => {
+    const history = useHistory();
+    console.log("🚀 ~ file: Password.jsx:8 ~ ChangePassword ~ user", user)
+
+
+    const handlePasswordChange = async (e) => {
         e.preventDefault();
+        
+        if (temp.currPassword === user.password) {
+            if (temp.newPassword === temp.confirmPassword) {
+                try {
+                    const { data } = await axios.put(`${users}/${user._id}`, dataToSubmit, 'data updated').then(res => {console.log(`res: `, res);});
+                    
+                    console.log("🚀 ~ file: Profile.jsx:46 ~ handleSaveChanges ~ data", data)
+                    if (data) {
+                        swal('Good Job!', 'Password updated', 'success').then(() => history.push('/users'));
+                    }
+                } catch (error) {
+                    swal('Failed', error.response.data.message, 'error');
+                }
+            } else {
+                swal('Failed', 'Password donot match!', 'error');
+            }
+        } else {
+            swal('Failed', "Current Password Incorrect!", 'error');
+        }
     }
-
+    let dataToSubmit = {password: user.password}
+    let temp = {currPassword: "", newPassword: "", confirmPassword: ""};
     const handleCurrentPassword = (e) => {
-
+        e.preventDefault();
+        temp.currPassword = e.target.value;
+        console.log("🚀 ~ file: Password.jsx:37 ~ handleCurrentPassword ~ e.target.value", e.target.value)
     }
 
     const handleNewPassword = (e) => {
+        e.preventDefault();
+        temp.newPassword = e.target.value;
+        console.log("🚀 ~ file: Password.jsx:43 ~ handleNewPassword ~ e.target.value", e.target.value)
     }
 
     const handleConfirmPassword = (e) => {
-
+        e.preventDefault();
+        temp.confirmPassword = e.target.value;
+        console.log("🚀 ~ file: Password.jsx:49 ~ handleConfirmPassword ~ e.target.value", e.target.value)
     }
 
     return (

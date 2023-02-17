@@ -5,6 +5,7 @@ import swal from "sweetalert";
 import ChangePassword from "./Password";
 import ProfileSettings from "./Profile";
 import { users } from '../../config/api-routes';
+import TeamsSettings from "./Teams";
 
 const AccountSettings = () => {
     const auth = useSelector(state => state.auth);
@@ -34,12 +35,12 @@ const AccountSettings = () => {
             <p>Set your account settings below</p>
 
             <div className="row">
-                <ul className="nav nav-pills nav-justified m-auto w-75 p-2 ">
+                <ul className="nav nav-pills nav-justified m-auto w-75 p-0" style={{ backgroundColor: "#E5E5E5", borderRadius: "10px" }}>
                     <li className="nav-item link-dark">
                         <a
                             href="#Profile"
                             className={`nav-link ${activeTab === "Profile" ? "active" : ""}`}
-                            style={{ color: "#000" }}
+                            style={{ color: "#000", borderRadius: "10px" }}
                             onClick={() => handleTabChange("Profile")}
                         >
                             Profile
@@ -50,7 +51,7 @@ const AccountSettings = () => {
                         <a
                             href="#Password"
                             className={`nav-link ${activeTab === "Password" ? "active" : ""}`}
-                            style={{ color: "#000" }}
+                            style={{ color: "#000", borderRadius: "10px" }}
                             onClick={() => handleTabChange("Password")}
                         >
                             Password
@@ -61,7 +62,7 @@ const AccountSettings = () => {
                         <a
                             href="#Teams"
                             className={`nav-link ${activeTab === "Teams" ? "active" : ""}`}
-                            style={{ color: "#000" }}
+                            style={{ color: "#000", borderRadius: "10px" }}
                             onClick={() => handleTabChange("Teams")}
                         >
                             Teams
@@ -74,6 +75,9 @@ const AccountSettings = () => {
                 {activeTab === "Profile" && <ProfileSettings user={user} />}
 
                 {activeTab === "Password" && <ChangePassword user={user} />}
+
+                {activeTab === "Teams" && <TeamsSettings user={user} />}
+
             </div>
         </div>
     )
