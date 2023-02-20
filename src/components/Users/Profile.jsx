@@ -1,59 +1,33 @@
-import { React, useEffect, useState } from "react";
+import { React } from "react";
 import axios from 'axios';
 import swal from 'sweetalert';
 import CustomImageUploader from "./avatar";
 import { users } from '../../config/api-routes';
-import { useHistory } from "react-router-dom";
 
 const ProfileSettings = ({ user }) => {
-    const history = useHistory();
-    // const [data, setData] = useState({
-    //     id: "",
-    //     firstName: "",
-    //     lastName: "",
-    //     image: "",
-    //     email: "",
-    // });
-    // console.log("🚀 ~ file: Profile.jsx:15 ~ ProfileSettings ~ data", data)
-
-    // useEffect(() => {
-    //     setData({ ...user });
-    // }, []);
-
     let dataToSubmit = { firstName: user.firstName, lastName: user.lastName, image: user.image, phone: user.phone };
 
     const handleFirstNameChange = (e) => {
         e.preventDefault();
         dataToSubmit.firstName = e.target.value;
-        console.log("🚀 ~ file: Profile.jsx:24 ~ handleFirstNameChange ~ e.target.value", e.target.value)
     };
 
     const handleLastNameChange = (e) => {
         e.preventDefault();
         dataToSubmit.lastName = e.target.value;
-        console.log("🚀 ~ file: Profile.jsx:29 ~ handleLastNameChange ~ e.target.value", e.target.value);
     };
 
     const handlePhoneNumberChange = e => {
         e.preventDefault();
         dataToSubmit.phone = e.target.value;
-        console.log("🚀 ~ file: Profile.jsx:40 ~ handlePhoneNumberChange ~ e.target.value", e.target.value)
     }
-
-    const getImageToUpload = (img) => {
-        console.log("🚀 ~ file: Profile.jsx:34 ~ getImageToUpload ~ img", img)
-        dataToSubmit.image = img;
-    };
 
     const handleSaveChanges = async (e) => {
         e.preventDefault();
-        console.log("🚀 ~ file: Profile.jsx:39 ~ handleSaveChanges ~ dataToSubmit", dataToSubmit)
         try {
-            const { data } = await axios.put(`${users}/${user._id}`, dataToSubmit, 'data updated').then(res => { console.log(`res: `, res); });
-
-            console.log("🚀 ~ file: Profile.jsx:46 ~ handleSaveChanges ~ data", data)
+            const { data } = await axios.put(`${users}/${user._id}`, dataToSubmit);
             if (data) {
-                swal('Good Job!', 'User updated', 'success').then(() => history.push('/users'));
+                swal('Good Job!', 'User updated', 'success');
             }
         } catch (error) {
             swal('Failed', error.response.data.message, 'error');
@@ -63,10 +37,12 @@ const ProfileSettings = ({ user }) => {
     return (
         <div className="container w-75">
             <div className="row mt-4">
-                <div className="col-4 m-auto">
-                    <CustomImageUploader getImage={getImageToUpload} img={user.image ? user.image : ""} />
-                    <small> Supported formats: JPEG, PNG or GIF <br />
-                        Max size: 10 MB </small>
+                <div className="col-4">
+                    <CustomImageUploader userId={user._id} img={user.image ? user.image : ""} />
+                    <p className="pt-2">
+                        <small>Supported formats: JPEG, PNG or GIF <br />
+                        Max size: 10 MB</small>
+                    </p>
                 </div>
                 <form className="col-8 m-auto" onSubmit={handleSaveChanges}>
                     <div className="form-group mb-4">

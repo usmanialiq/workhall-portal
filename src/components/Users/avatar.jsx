@@ -1,23 +1,35 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import swal from 'sweetalert';
+import { users } from '../../config/api-routes';
 import ProfileUploadImg from '../../assets/placeholder.png';
 
-function CustomImageUploader({ getImage, img }) {
+function CustomImageUploader({ userId, img }) {
     const [image, setImage] = useState({ preview: "", raw: "" });
     const myImage = img.length ? img : ProfileUploadImg;
 
-    const handleChange = e => {
-        if (e.target.files.length) {
+    const handleChange = async e => {
+        const file = e.target.files;
+        if (file.length) {
             setImage({
-                preview: URL.createObjectURL(e.target.files[0]),
-                raw: e.target.files[0],
+                preview: URL.createObjectURL(file[0]),
+                raw: file[0],
             });
-            handleImage();
+            return handleImage(file[0]);
         }
     };
 
-    const handleImage = () => {
-        getImage(image.raw);
-        console.log("🚀 ~ file: avatar.jsx:22 ~ handleImage ~ image.raw", image.raw)
+    const handleImage = async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        try {
+            const { data } = await axios.put(`${users}/image/${userId}`, formData);
+            if (data) {
+                swal('Good Job!', 'Image uploaded', 'success');
+            }
+        } catch (error) {
+            swal('Failed', error.response.data.message, 'error');
+        }
     };
 
     return (
@@ -26,7 +38,7 @@ function CustomImageUploader({ getImage, img }) {
                 {image.preview ? (
                     <img
                         src={image.preview}
-                        className='img-fluid rounded-circle'
+                        className='rounded-circle'
                         width={106}
                         height={106}
                         alt='Profile Upload PH'

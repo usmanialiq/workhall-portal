@@ -2,11 +2,8 @@ import { React } from "react";
 import axios from 'axios';
 import swal from 'sweetalert';
 import { users } from '../../config/api-routes';
-import { useHistory } from "react-router-dom";
 
 const TeamsSettings = ({ user }) => {
-    const history = useHistory();
-
 
     let dataToSubmit = { businessType: user.businessType, companyName: user.companyName, companyWebsite: user.companyWebsite, companyDesc: user.companyDesc };
 
@@ -30,8 +27,16 @@ const TeamsSettings = ({ user }) => {
         dataToSubmit.companyDesc = e.target.value;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         alert("submit");
+        try {
+            const { data } = await axios.put(`${users}/${user._id}`, dataToSubmit);
+            if (data) {
+                swal('Good Job!', 'User updated', 'success');
+            }
+        } catch (error) {
+            swal('Failed', error.response.data.message, 'error');
+        }
     }
 
     return (
@@ -45,6 +50,7 @@ const TeamsSettings = ({ user }) => {
                         type="text"
                         className="form-control mt-2"
                         id="businessType"
+                        defaultValue={user.businessType}
                         placeholder="Enter Business Type"
                         required
                         onChange={handleBusinessType}
@@ -58,6 +64,7 @@ const TeamsSettings = ({ user }) => {
                         type="text"
                         className="form-control mt-2"
                         id="companyName"
+                        defaultValue={user.companyName}
                         placeholder="Enter Company Name"
                         required
                         onChange={handleCompanyName}
@@ -71,6 +78,7 @@ const TeamsSettings = ({ user }) => {
                         type="url"
                         className="form-control mt-2"
                         id="companyWebsite"
+                        defaultValue={user.companyWebsite}
                         placeholder="Enter Company Website"
                         required
                         onChange={handleCompanyWebsite}
@@ -83,7 +91,7 @@ const TeamsSettings = ({ user }) => {
                     <textarea
                         className='form-control mt-2 c-textarea'
                         id='companyDesc'
-                        value={user.companyDesc}
+                        defaultValue={user.companyDesc}
                         required
                         placeholder='Set description of the Company'
                         onChange={handleCompanyDesc}
