@@ -1,15 +1,19 @@
-import { React } from "react";
+import { useState } from "react";
 import axios from 'axios';
 import swal from 'sweetalert';
 import { users } from '../../config/api-routes';
 
 const ChangePassword = ({ user }) => {
-    let temp = {oldPassword: "", newPassword: "", confirmPassword: ""};
+    const [payload, setPayload] = useState({
+        oldPassword: "", 
+        newPassword: "", 
+        confirmPassword: "",
+    });
 
     const handlePasswordChange = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.put(`${users}/change-password/${user._id}`, temp);
+            const { data } = await axios.put(`${users}/change-password/${user._id}`, payload);
             if (data) {
                 swal('Good Job!', 'Password updated', 'success');
             }
@@ -18,62 +22,50 @@ const ChangePassword = ({ user }) => {
         }
     };
 
-    const handleCurrentPassword = (e) => {
-        e.preventDefault();
-        temp.oldPassword = e.target.value;
-    };
-
-    const handleNewPassword = (e) => {
-        e.preventDefault();
-        temp.newPassword = e.target.value;
-    };
-
-    const handleConfirmPassword = (e) => {
-        e.preventDefault();
-        temp.confirmPassword = e.target.value;
-    };
-
     return (
         <div className="container w-50 mt-4">
             <form onSubmit={handlePasswordChange}>
-                <div className="form-group mb-4">
-                    <label htmlFor="current_password">
-                        Current Password
-                    </label>
+                <div className="form-floating mb-4">
                     <input
                         type="password"
                         className="form-control mt-2"
-                        id="current_password"
+                        id="currentPassword"
                         placeholder="Enter current password"
                         required
-                        onChange={handleCurrentPassword}
+                        value={payload.oldPassword}
+                        onChange={e => setPayload({ ...payload, oldPassword: e.target.value })}
                     />
-                </div>
-                <div className="form-group mb-4">
-                    <label htmlFor="new_password">
-                        New Password
+                    <label htmlFor="currentPassword">
+                        Current Password
                     </label>
+                </div>
+                <div className="form-floating mb-4">
                     <input
                         type="password"
                         className="form-control mt-2"
-                        id="new_password"
+                        id="newPassword"
                         placeholder="Enter new password"
                         required
-                        onChange={handleNewPassword}
+                        value={payload.newPassword}
+                        onChange={e => setPayload({ ...payload, newPassword: e.target.value })}
                     />
-                </div>
-                <div className="form-group mb-2">
-                    <label htmlFor="confirm_password">
-                        Confirm Password
+                    <label htmlFor="newPassword">
+                        New Password
                     </label>
+                </div>
+                <div className="form-floating mb-2">
                     <input
                         type="password"
                         className="form-control mt-2"
-                        id="confirm_password"
+                        id="confirmPassword"
                         placeholder="Re-enter new password"
                         required
-                        onChange={handleConfirmPassword}
+                        value={payload.confirmPassword}
+                        onChange={e => setPayload({ ...payload, confirmPassword: e.target.value })}
                     />
+                    <label htmlFor="confirmPassword">
+                        Confirm Password
+                    </label>
                 </div>
                 <button
                     type="submit"

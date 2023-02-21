@@ -45,10 +45,7 @@ const ProfileSettings = ({ user }) => {
                     </p>
                 </div>
                 <form className="col-8 m-auto" onSubmit={handleSaveChanges}>
-                    <div className="form-group mb-4">
-                        <label htmlFor="firstName">
-                            First Name
-                        </label>
+                    <div className="form-floating mb-4">
                         <input
                             type="text"
                             className="form-control mt-2"
@@ -58,11 +55,11 @@ const ProfileSettings = ({ user }) => {
                             defaultValue={user.firstName}
                             onChange={handleFirstNameChange}
                         />
-                    </div>
-                    <div className="form-group mb-4">
-                        <label htmlFor="lastName">
-                            Last Name
+                        <label htmlFor="firstName">
+                            First Name
                         </label>
+                    </div>
+                    <div className="form-floating mb-4">
                         <input
                             type="text"
                             className="form-control mt-2"
@@ -72,11 +69,11 @@ const ProfileSettings = ({ user }) => {
                             defaultValue={user.lastName}
                             onChange={handleLastNameChange}
                         />
-                    </div>
-                    <div className="form-group mb-4">
-                        <label htmlFor="email">
-                            Email
+                        <label htmlFor="lastName">
+                            Last Name
                         </label>
+                    </div>
+                    <div className="form-floating mb-4">
                         <input
                             type="email"
                             className="form-control mt-2"
@@ -85,11 +82,11 @@ const ProfileSettings = ({ user }) => {
                             readOnly
                             value={user.email}
                         />
-                    </div>
-                    <div className="form-group mb-2">
-                        <label htmlFor="phoneNumber">
-                            Phone Number
+                        <label htmlFor="email">
+                            Email
                         </label>
+                    </div>
+                    <div className="form-floating mb-2">
                         <input
                             type="phone"
                             className="form-control mt-2"
@@ -99,6 +96,9 @@ const ProfileSettings = ({ user }) => {
                             defaultValue={user.phone}
                             onChange={handlePhoneNumberChange}
                         />
+                        <label htmlFor="phoneNumber">
+                            Phone Number
+                        </label>
                     </div>
                     <button
                         type="submit"

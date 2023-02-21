@@ -1,34 +1,17 @@
-import { React } from "react";
 import axios from 'axios';
 import swal from 'sweetalert';
 import { users } from '../../config/api-routes';
 
 const TeamsSettings = ({ user }) => {
-
-    let dataToSubmit = { businessType: user.businessType, companyName: user.companyName, companyWebsite: user.companyWebsite, companyDesc: user.companyDesc };
-
-    const handleBusinessType = e => {
-        e.preventDefault();
-        dataToSubmit.businessType = e.target.value;
-    };
-
-    const handleCompanyName = e => {
-        e.preventDefault();
-        dataToSubmit.companyName = e.target.value;
-    };
-
-    const handleCompanyWebsite = e => {
-        e.preventDefault();
-        dataToSubmit.companyWebsite = e.target.value;
-    };
-
-    const handleCompanyDesc = e => {
-        e.preventDefault();
-        dataToSubmit.companyDesc = e.target.value;
+    let dataToSubmit = { 
+        businessType: user.businessType, 
+        companyName: user.companyName, 
+        companyWebsite: user.companyWebsite, 
+        companyDesc: user.companyDesc 
     };
 
     const handleSubmit = async (e) => {
-        alert("submit");
+        e.preventDefault();
         try {
             const { data } = await axios.put(`${users}/${user._id}`, dataToSubmit);
             if (data) {
@@ -42,24 +25,24 @@ const TeamsSettings = ({ user }) => {
     return (
         <div className="container w-50 mt-4">
             <form onSubmit={handleSubmit}>
-                <div className="form-group mb-3">
-                    <label htmlFor="businessType">
-                        Business Type
-                    </label>
-                    <input
-                        type="text"
-                        className="form-control mt-2"
+                <div className="form-floating mb-3">
+                    <select
+                        className="form-select"
                         id="businessType"
                         defaultValue={user.businessType}
                         placeholder="Enter Business Type"
                         required
-                        onChange={handleBusinessType}
-                    />
-                </div>
-                <div className="form-group mb-3">
-                    <label htmlFor="companyName">
-                        Company Name
+                        onChange={e => {dataToSubmit.businessType = e.target.value}}
+                    >
+                        <option></option>
+                        <option value='indiviudal'>Individual</option>
+                        <option value='company'>Company</option>
+                    </select>
+                    <label htmlFor="businessType">
+                        Business Type
                     </label>
+                </div>
+                <div className="form-floating mb-3">
                     <input
                         type="text"
                         className="form-control mt-2"
@@ -67,13 +50,13 @@ const TeamsSettings = ({ user }) => {
                         defaultValue={user.companyName}
                         placeholder="Enter Company Name"
                         required
-                        onChange={handleCompanyName}
+                        onChange={e => {dataToSubmit.companyName = e.target.value}}
                     />
-                </div>
-                <div className="form-group mb-3">
-                    <label htmlFor="companyWebsite">
-                        Company Website
+                    <label htmlFor="companyName">
+                        Company Name
                     </label>
+                </div>
+                <div className="form-floating mb-3">
                     <input
                         type="url"
                         className="form-control mt-2"
@@ -81,21 +64,24 @@ const TeamsSettings = ({ user }) => {
                         defaultValue={user.companyWebsite}
                         placeholder="Enter Company Website"
                         required
-                        onChange={handleCompanyWebsite}
+                        onChange={e => {dataToSubmit.companyWebsite = e.target.value}}
                     />
-                </div>
-                <div className="form-group mb-2">
-                    <label htmlFor="companyDesc">
-                        Company Description
+                    <label htmlFor="companyWebsite">
+                        Company Website
                     </label>
+                </div>
+                <div className="form-floating mb-2">
                     <textarea
                         className='form-control mt-2 c-textarea'
                         id='companyDesc'
                         defaultValue={user.companyDesc}
                         required
                         placeholder='Set description of the Company'
-                        onChange={handleCompanyDesc}
+                        onChange={e => {dataToSubmit.companyDesc = e.target.value}}
                     ></textarea>
+                    <label htmlFor="companyDesc">
+                        Company Description
+                    </label>
                 </div>
                 <button
                     type="submit"
