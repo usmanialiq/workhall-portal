@@ -1,19 +1,20 @@
 import axios from 'axios';
+import { useState } from 'react';
 import swal from 'sweetalert';
 import { users } from '../../config/api-routes';
 
 const TeamsSettings = ({ user }) => {
-    let dataToSubmit = { 
-        businessType: user.businessType, 
-        companyName: user.companyName, 
-        companyWebsite: user.companyWebsite, 
-        companyDesc: user.companyDesc 
-    };
+    const [payload, setPayload] = useState({
+        businessType: "", 
+        companyName: "", 
+        companyWebsite: "", 
+        companyDesc: ""
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.put(`${users}/${user._id}`, dataToSubmit);
+            const { data } = await axios.put(`${users}/${user._id}`, payload);
             if (data) {
                 swal('Good Job!', 'User updated', 'success');
             }
@@ -32,7 +33,7 @@ const TeamsSettings = ({ user }) => {
                         defaultValue={user.businessType}
                         placeholder="Enter Business Type"
                         required
-                        onChange={e => {dataToSubmit.businessType = e.target.value}}
+                        onChange={e => setPayload({...payload, businessType: e.target.value})}
                     >
                         <option></option>
                         <option value='indiviudal'>Individual</option>
@@ -50,7 +51,7 @@ const TeamsSettings = ({ user }) => {
                         defaultValue={user.companyName}
                         placeholder="Enter Company Name"
                         required
-                        onChange={e => {dataToSubmit.companyName = e.target.value}}
+                        onChange={e => setPayload({...payload, companyName: e.target.value})}
                     />
                     <label htmlFor="companyName">
                         Company Name
@@ -64,7 +65,7 @@ const TeamsSettings = ({ user }) => {
                         defaultValue={user.companyWebsite}
                         placeholder="Enter Company Website"
                         required
-                        onChange={e => {dataToSubmit.companyWebsite = e.target.value}}
+                        onChange={e => setPayload({...payload, companyWebsite: e.target.value})}
                     />
                     <label htmlFor="companyWebsite">
                         Company Website
@@ -77,7 +78,7 @@ const TeamsSettings = ({ user }) => {
                         defaultValue={user.companyDesc}
                         required
                         placeholder='Set description of the Company'
-                        onChange={e => {dataToSubmit.companyDesc = e.target.value}}
+                        onChange={e => setPayload({...payload, companyDesc: e.target.value})}
                     ></textarea>
                     <label htmlFor="companyDesc">
                         Company Description

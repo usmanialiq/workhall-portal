@@ -1,31 +1,21 @@
-import { React } from "react";
+import { React, useState } from "react";
 import axios from 'axios';
 import swal from 'sweetalert';
 import CustomImageUploader from "./avatar";
 import { users } from '../../config/api-routes';
 
 const ProfileSettings = ({ user }) => {
-    let dataToSubmit = { firstName: user.firstName, lastName: user.lastName, image: user.image, phone: user.phone };
-
-    const handleFirstNameChange = (e) => {
-        e.preventDefault();
-        dataToSubmit.firstName = e.target.value;
-    };
-
-    const handleLastNameChange = (e) => {
-        e.preventDefault();
-        dataToSubmit.lastName = e.target.value;
-    };
-
-    const handlePhoneNumberChange = e => {
-        e.preventDefault();
-        dataToSubmit.phone = e.target.value;
-    }
+    const [payload, setPayload] = useState({ 
+        firstName: "", 
+        lastName: "", 
+        image: "", 
+        phone: ""
+    });
 
     const handleSaveChanges = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.put(`${users}/${user._id}`, dataToSubmit);
+            const { data } = await axios.put(`${users}/${user._id}`, payload);
             if (data) {
                 swal('Good Job!', 'User updated', 'success');
             }
@@ -53,7 +43,7 @@ const ProfileSettings = ({ user }) => {
                             placeholder="Enter first name"
                             required
                             defaultValue={user.firstName}
-                            onChange={handleFirstNameChange}
+                            onChange={e => setPayload({ ...payload, firstName: e.target.value })}
                         />
                         <label htmlFor="firstName">
                             First Name
@@ -67,7 +57,7 @@ const ProfileSettings = ({ user }) => {
                             placeholder="Enter Last Name"
                             required
                             defaultValue={user.lastName}
-                            onChange={handleLastNameChange}
+                            onChange={e => setPayload({ ...payload, lastName: e.target.value })}
                         />
                         <label htmlFor="lastName">
                             Last Name
@@ -94,7 +84,7 @@ const ProfileSettings = ({ user }) => {
                             placeholder="Enter Phone Number"
                             required
                             defaultValue={user.phone}
-                            onChange={handlePhoneNumberChange}
+                            onChange={e => setPayload({ ...payload, phone: e.target.value })}
                         />
                         <label htmlFor="phoneNumber">
                             Phone Number
