@@ -52,10 +52,10 @@ function UserList() {
                         <div className='col-6 text-end'>Filter By:</div>
                         <div className='col-6'>
                             <select className='form-select' onChange={e => setType(e.target.value)}>
-                                <option value=''>User Type</option>
+                                <option value=''>Type</option>
                                 <option value='admin'>Admin</option>
                                 <option value='manager'>Manager</option>
-                                <option value='user'>User</option>
+                                <option value='member'>Member</option>
                             </select>
                         </div>
                     </div>
@@ -83,7 +83,7 @@ function UserList() {
                                         <td>{each.lastName}</td>
                                         <td>{each.email}</td>
                                         <td>{each.phone}</td>
-                                        <td>{each.type}</td>
+                                        <td className='text-capitalize'>{each.type}</td>
                                         <td>{each.verified ? 'Yes' : 'No'}</td>
                                         <td className='text-end'>
                                             <div className="dropdown">

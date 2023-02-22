@@ -6,10 +6,11 @@ import { users } from '../../config/api-routes';
 
 const ProfileSettings = ({ user }) => {
     const [payload, setPayload] = useState({ 
-        firstName: "", 
-        lastName: "", 
-        image: "", 
-        phone: ""
+        firstName: user.firstName, 
+        lastName: user.lastName, 
+        image: user.image, 
+        phone: user.phone,
+        bio: user.bio,
     });
 
     const handleSaveChanges = async (e) => {
@@ -90,6 +91,19 @@ const ProfileSettings = ({ user }) => {
                             Phone Number
                         </label>
                     </div>
+                    <div className="form-floating mb-2">
+                    <textarea
+                        className='form-control mt-2 c-textarea'
+                        id='bio'
+                        defaultValue={user.bio}
+                        required
+                        placeholder='Set bio'
+                        onChange={e => setPayload({...payload, bio: e.target.value})}
+                    ></textarea>
+                    <label htmlFor="bio">
+                        Bio
+                    </label>
+                </div>
                     <button
                         type="submit"
                         className="btn btn-dark mt-3 col-12"
