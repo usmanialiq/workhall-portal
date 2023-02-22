@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import swal from 'sweetalert';
 import { FiMoreVertical } from 'react-icons/fi'
 import { users } from '../../config/api-routes';
+import GrantAccess from './GrantAccess';
 
 const header = ['First Name', 'Last Name', 'Email', 'Phone', 'Type', 'Verified'];
 
@@ -40,10 +41,10 @@ function UserList() {
                     <h2>Users</h2>
                 </div>
                 <div className='col-4 text-end'>
-                    <input 
-                        type='text' 
-                        className='form-control' 
-                        placeholder='Search by name or email' 
+                    <input
+                        type='text'
+                        className='form-control'
+                        placeholder='Search by name or email'
                         onChange={e => setText(e.target.value)}
                     />
                 </div>
@@ -91,11 +92,16 @@ function UserList() {
                                                     <FiMoreVertical />
                                                 </span>
                                                 <ul className="dropdown-menu">
-                                                    <li><Link to={'/users/' + each._id} className="dropdown-item">Manage</Link></li>
+                                                    {/* <li><Link to={'/users/' + each._id} className="dropdown-item">Grant Access</Link></li> */}
+                                                    <li><button type="button" className="dropdown-item btn" data-bs-toggle="modal" data-bs-target="#grantAccess">
+                                                        Grant Access
+                                                    </button></li>
                                                     <li><button className="dropdown-item" type="button">Block Access</button></li>
                                                     <li><Link to={'/bookings/user/' + each._id} className="dropdown-item" type="button">Show Bookings</Link></li>
                                                 </ul>
-                                            </div></td>
+                                                <GrantAccess id={each._id} type={each.type} reload={() => fetchUsers()}  />
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
