@@ -92,7 +92,6 @@ function UserList() {
                                                     <FiMoreVertical />
                                                 </span>
                                                 <ul className="dropdown-menu">
-                                                    {/* <li><Link to={'/users/' + each._id} className="dropdown-item">Grant Access</Link></li> */}
                                                     <li><button type="button" className="dropdown-item btn" data-bs-toggle="modal" data-bs-target="#grantAccess">
                                                         Grant Access
                                                     </button></li>
