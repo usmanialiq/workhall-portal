@@ -1,5 +1,9 @@
 import { useState } from 'react';
+import axios from 'axios';
+import swal from 'sweetalert';
+import { Link, useHistory } from 'react-router-dom';
 import LogoImage from '../../assets/logo.png';
+import { register } from '../../config/api-routes';
 
 export default function RegisterPage() {
     const [firstName, setFirstName] = useState('');
@@ -9,8 +13,9 @@ export default function RegisterPage() {
     const [city, setCity] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const history = useHistory();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const payload = {
@@ -22,8 +27,16 @@ export default function RegisterPage() {
             password,
             confirmPassword,
         };
-        console.log('🚀 ~ file: LogIn.jsx:11 ~ handleSubmit ~ payload', payload);
-    }
+
+        try {
+            const { data } = await axios.post(register, payload);
+            if (data) {
+                swal('Good Job!', 'Booking created successfully', 'success').then(() => history('/'));
+            }
+        } catch (error) {
+            swal('Failed', error.response.data.message, 'error');
+        }
+    };
     return (
         <div className='container-fluid'>
             <form className='auth-form'>
@@ -115,7 +128,7 @@ export default function RegisterPage() {
                 <div className='text-center mt-3 mb-3'>
                     <button className='btn btn-primary btn-wh w-100' onClick={handleSubmit}>Sign Up</button>
 
-                    <p className='pt-3'>Already have an account? Login here</p>
+                    <p className='pt-3'>Already have an account? <Link to='/'> Login here</Link></p>
                 </div>
             </form>
         </div>

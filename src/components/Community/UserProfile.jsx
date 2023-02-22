@@ -4,24 +4,32 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 function UserProfile({ data }) {
     return (
         <div className='row align-items-center'>
-            <div className='col-2'>
+            <div className='col-3'>
                 <img 
                     src={data.image ? data.image : WHLogo} 
-                    className='img-fluid user-img' 
+                    className='user-img' 
                     alt={data.firstName} 
                     width={60}
                     height={60}
                 />
             </div>
-            <div className='col-5'>
+            <div className='col-9 text-end'>
                 <h3 className='fw-bold'>{data.firstName} {data.lastName}</h3>
-                <span className='text-primary'>Engineer</span>
+                <span className='text-primary '>Engineer</span>
             </div>
-            <div className='col-5'>
+            <div className='col-12'>
                 <p className='text-end'><FaMapMarkerAlt className='text-primary' /> {data.city ?? 'Karachi'}, {data.country ?? 'Pakistan'}</p>
             </div>
             <div className='col-12'>
-                <p className='mt-3 fw-bold'>Excepteur do culpa incididunt laboris veniam. Pariatur anim cupidatat exercitation dolore aute cupidatat qui tempor eu. Exercitation exercitation sit et non quis eiusmod enim occaecat nostrud sint nisi dolor.</p>
+                <p className='mt-3 fw-bold'> {data.bio}</p>
+            </div>
+            <hr />
+            <div className='col-12'>
+                <h4 className='fw-bold'>Business</h4>
+                <div>Company Name:  {data.companyName}</div>
+                <div>Type: {data.businessType}</div>
+                <a href={data.companyWebsite}>Website: {data.companyWebsite}</a>
+                <div>Description: {data.companyDesc}</div>
             </div>
         </div>
     );

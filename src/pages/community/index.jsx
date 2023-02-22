@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 import { users } from '../../config/api-routes';
-import WHLogo from '../../assets/logo.png';
 import UserProfile from '../../components/Community/UserProfile';
 
 function Community() {
@@ -15,7 +14,7 @@ function Community() {
 
     const fetchUsers = useCallback(async () => {
         try {
-            const { data } = await axios.get(`${users}?page=${pagination.page}&type=user&search=${text}`);
+            const { data } = await axios.get(`${users}?page=${pagination.page}&type=member&search=${text}`);
             setData(data.users);
             setPagination({
                 total: data.total,
