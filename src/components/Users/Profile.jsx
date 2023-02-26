@@ -32,7 +32,7 @@ const ProfileSettings = ({ user }) => {
                     <CustomImageUploader userId={user._id} img={user.image ? user.image : ""} />
                     <p className="pt-2">
                         <small>Supported formats: JPEG, PNG or GIF <br />
-                        Max size: 10 MB</small>
+                        Max size: 250kb</small>
                     </p>
                 </div>
                 <form className="col-8 m-auto" onSubmit={handleSaveChanges}>

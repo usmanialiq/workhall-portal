@@ -10,6 +10,10 @@ function CustomImageUploader({ userId, img }) {
 
     const handleChange = async e => {
         const file = e.target.files;
+        if (file[0].size > (250 * 1000)) {
+            swal('Failed', 'File size more than 250 KBs', 'error');
+            return;
+        }
         if (file.length) {
             setImage({
                 preview: URL.createObjectURL(file[0]),

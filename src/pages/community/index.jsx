@@ -14,7 +14,7 @@ function Community() {
 
     const fetchUsers = useCallback(async () => {
         try {
-            const { data } = await axios.get(`${users}?page=${pagination.page}&type=member&search=${text}`);
+            const { data } = await axios.get(`${users}?page=${pagination.page}&search=${text}`);
             setData(data.users);
             setPagination({
                 total: data.total,
